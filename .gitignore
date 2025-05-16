@@ -1,0 +1,53 @@
+# Компилированные файлы и директории
+/dist/
+/out-tsc/
+/build/
+/tmp/
+/.angular
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# node.js зависимости
+node_modules/
+
+# Прод окружение
+.env
+.env.*.local
+
+# Файлы логов
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Angular-specific
+/.angular/cache/
+/.angular/
+
+# IDE и редакторы
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Coverage отчёты
+/coverage/
+
+# Компиляция TypeScript
+*.js.map
+
+# Кэш линтеров
+.eslintcache
+
+# Файлы системы и временные
+*.swp
+*.bak
+*.tmp
+
+# Firebase/Netlify (если используется)
+.firebase/
+functions/node_modules/
