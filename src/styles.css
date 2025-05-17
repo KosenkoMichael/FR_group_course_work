@@ -1,0 +1,157 @@
+table:has(tbody:empty) {
+  display: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+form input,
+form textarea,
+form select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: #9826bb;
+  box-shadow: 0 0 5px rgba(152, 38, 187, 0.5);
+}
+
+.list {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.list a {
+  color: white;
+  text-decoration: none;
+}
+
+.list a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+body {
+  margin: 0;
+  font-size: 20px;
+  color: #5b1670;
+  font-family: 'Comic Neue', cursive, sans-serif;
+  background-color: #f3e5f5;
+  background-size: auto;
+  background-position: top left;
+  background-repeat: repeat;
+}
+
+h1{
+  text-align: center;
+}
+
+header {
+  background-color: #5b1670;
+  color: white;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+  text-align: center !important;
+  width: calc(100% / 6);
+  padding: 12px;
+  text-align: left;
+  border: none;
+}
+
+table thead {
+  background-color: #5b1670;
+  color: white;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f3e5f5;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+table tbody tr:hover {
+  background-color: #e1bee7;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 2px;
+  background-color: #5b1670;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #9826bb;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.form-button-wrapper {
+  text-align: center;
+}
+
+.table-wrapper {
+  padding: 0 50px;
+}
