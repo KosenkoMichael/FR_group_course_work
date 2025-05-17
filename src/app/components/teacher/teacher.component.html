@@ -1,0 +1,51 @@
+<h1>Преподаватели</h1>
+
+<form (ngSubmit)="addTeacher()">
+  <input [(ngModel)]="newTeacher.name" name="name" placeholder="Имя преподавателя" required />
+  <input [(ngModel)]="newTeacher.experience" name="experience" type="number" placeholder="Опыт (в годах)" required />
+  <input [(ngModel)]="newTeacher.specialization" name="specialization" placeholder="Специализация" required />
+  <input [(ngModel)]="newTeacher.rating" name="rating" type="number" placeholder="Рейтинг" required />
+  <input [(ngModel)]="newTeacher.courses" name="courses" placeholder="Курсы (через запятую)" required />
+
+  <div class="form-button-wrapper">
+    <button type="submit" title="{{ isEditMode ? 'Сохранить' : 'Добавить преподавателя' }}">
+      <i class="fas" [ngClass]="isEditMode ? 'fa-save' : 'fa-plus'"></i>
+    </button>
+
+    <button type="button" *ngIf="isEditMode" (click)="cancelEdit()" title="Отмена">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</form>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Имя</th>
+        <th>Опыт</th>
+        <th>Специализация</th>
+        <th>Рейтинг</th>
+        <th>Курсы</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let teacher of teachers">
+        <td>{{ teacher.name }}</td>
+        <td>{{ teacher.experience }}</td>
+        <td>{{ teacher.specialization }}</td>
+        <td>{{ teacher.rating }}</td>
+        <td>{{ teacher.courses.join(', ') }}</td>
+        <td>
+          <button (click)="editTeacher(teacher)" title="Редактировать">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button (click)="deleteTeacher(teacher.id)" title="Удалить">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
