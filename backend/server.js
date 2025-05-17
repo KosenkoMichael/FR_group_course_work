@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 
 const db = new sqlite3.Database('./mydb.sqlite');
 
+// Инициализация базы данных
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS courses (
@@ -28,7 +29,7 @@ db.serialize(() => {
       experience INTEGER,
       specialization TEXT,
       rating REAL,
-      courses TEXT -- можно хранить в виде JSON строки
+      courses TEXT
     )
   `);
 
@@ -37,14 +38,14 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       age INTEGER,
-      courses TEXT,  -- JSON строка массива
-      grades TEXT,   -- JSON строка массива
+      courses TEXT,
+      grades TEXT,
       status TEXT
     )
   `);
 });
 
-// ======== COURSES ========
+// ========== COURSES ==========
 app.get('/courses', (req, res) => {
   db.all('SELECT * FROM courses', [], (err, rows) => {
     if (err) return res.status(500).send(err.message);
@@ -59,7 +60,10 @@ app.post('/courses', (req, res) => {
     [name, description, duration, price, teacher],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.json({ id: this.lastID });
+      db.get(`SELECT * FROM courses WHERE id = ?`, [this.lastID], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(row);
+      });
     }
   );
 });
@@ -67,7 +71,7 @@ app.post('/courses', (req, res) => {
 app.delete('/courses/:id', (req, res) => {
   db.run(`DELETE FROM courses WHERE id = ?`, [req.params.id], function (err) {
     if (err) return res.status(500).send(err.message);
-    res.sendStatus(200);
+    res.json({ success: true });
   });
 });
 
@@ -78,20 +82,23 @@ app.put('/courses/:id', (req, res) => {
     [name, description, duration, price, teacher, req.params.id],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.sendStatus(200);
+      db.get(`SELECT * FROM courses WHERE id = ?`, [req.params.id], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(row);
+      });
     }
   );
 });
 
-// ======== TEACHERS ========
+// ========== TEACHERS ==========
 app.get('/teachers', (req, res) => {
   db.all('SELECT * FROM teachers', [], (err, rows) => {
     if (err) return res.status(500).send(err.message);
-    rows = rows.map(row => ({
+    const parsed = rows.map(row => ({
       ...row,
       courses: row.courses ? JSON.parse(row.courses) : []
     }));
-    res.json(rows);
+    res.json(parsed);
   });
 });
 
@@ -103,7 +110,11 @@ app.post('/teachers', (req, res) => {
     [name, experience, specialization, rating, coursesStr],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.json({ id: this.lastID });
+      db.get(`SELECT * FROM teachers WHERE id = ?`, [this.lastID], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        row.courses = row.courses ? JSON.parse(row.courses) : [];
+        res.json(row);
+      });
     }
   );
 });
@@ -111,7 +122,7 @@ app.post('/teachers', (req, res) => {
 app.delete('/teachers/:id', (req, res) => {
   db.run(`DELETE FROM teachers WHERE id = ?`, [req.params.id], function (err) {
     if (err) return res.status(500).send(err.message);
-    res.sendStatus(200);
+    res.json({ success: true });
   });
 });
 
@@ -123,21 +134,25 @@ app.put('/teachers/:id', (req, res) => {
     [name, experience, specialization, rating, coursesStr, req.params.id],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.sendStatus(200);
+      db.get(`SELECT * FROM teachers WHERE id = ?`, [req.params.id], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        row.courses = row.courses ? JSON.parse(row.courses) : [];
+        res.json(row);
+      });
     }
   );
 });
 
-// ======== STUDENTS ========
+// ========== STUDENTS ==========
 app.get('/students', (req, res) => {
   db.all('SELECT * FROM students', [], (err, rows) => {
     if (err) return res.status(500).send(err.message);
-    rows = rows.map(row => ({
+    const parsed = rows.map(row => ({
       ...row,
       courses: row.courses ? JSON.parse(row.courses) : [],
       grades: row.grades ? JSON.parse(row.grades) : []
     }));
-    res.json(rows);
+    res.json(parsed);
   });
 });
 
@@ -150,7 +165,12 @@ app.post('/students', (req, res) => {
     [name, age, coursesStr, gradesStr, status],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.json({ id: this.lastID });
+      db.get(`SELECT * FROM students WHERE id = ?`, [this.lastID], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        row.courses = row.courses ? JSON.parse(row.courses) : [];
+        row.grades = row.grades ? JSON.parse(row.grades) : [];
+        res.json(row);
+      });
     }
   );
 });
@@ -158,7 +178,7 @@ app.post('/students', (req, res) => {
 app.delete('/students/:id', (req, res) => {
   db.run(`DELETE FROM students WHERE id = ?`, [req.params.id], function (err) {
     if (err) return res.status(500).send(err.message);
-    res.sendStatus(200);
+    res.json({ success: true });
   });
 });
 
@@ -171,9 +191,15 @@ app.put('/students/:id', (req, res) => {
     [name, age, coursesStr, gradesStr, status, req.params.id],
     function (err) {
       if (err) return res.status(500).send(err.message);
-      res.sendStatus(200);
+      db.get(`SELECT * FROM students WHERE id = ?`, [req.params.id], (err, row) => {
+        if (err) return res.status(500).send(err.message);
+        row.courses = row.courses ? JSON.parse(row.courses) : [];
+        row.grades = row.grades ? JSON.parse(row.grades) : [];
+        res.json(row);
+      });
     }
   );
 });
 
+// Запуск сервера
 app.listen(3000, () => console.log('Server started on http://localhost:3000'));
