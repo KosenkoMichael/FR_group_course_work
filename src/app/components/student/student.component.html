@@ -1,0 +1,51 @@
+<h1>Студенты</h1>
+
+<form (ngSubmit)="addStudent()">
+  <input [(ngModel)]="newStudent.name" name="name" placeholder="Имя студента" required />
+  <input [(ngModel)]="newStudent.age" name="age" type="number" placeholder="Возраст" required />
+  <input [(ngModel)]="newStudent.courses" name="courses" placeholder="Курсы (через запятую)" required />
+  <input [(ngModel)]="newStudent.grades" name="grades" placeholder="Оценки (через запятую)" required />
+  <input [(ngModel)]="newStudent.status" name="status" placeholder="Статус" required />
+
+  <div class="form-button-wrapper">
+    <button type="submit" title="{{ isEditMode ? 'Сохранить' : 'Добавить студента' }}">
+      <i class="fas" [ngClass]="isEditMode ? 'fa-save' : 'fa-plus'"></i>
+    </button>
+
+    <button type="button" *ngIf="isEditMode" (click)="cancelEdit()" title="Отмена">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</form>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Имя</th>
+        <th>Возраст</th>
+        <th>Курсы</th>
+        <th>Оценки</th>
+        <th>Статус</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.name }}</td>
+        <td>{{ student.age }}</td>
+        <td>{{ student.courses.join(', ') }}</td>
+        <td>{{ student.grades.join(', ') }}</td>
+        <td>{{ student.status }}</td>
+        <td>
+          <button (click)="editStudent(student)" title="Редактировать">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button (click)="deleteStudent(student.id)" title="Удалить">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
